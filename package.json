@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"license": "MIT",
 	"scripts": {
-		"dev": "nodemon ./src/index.ts"
+		"dev": "nodemon --files ./src/index.ts"
 	},
 	"devDependencies": {
 		"nodemon": "^3.1.0",
