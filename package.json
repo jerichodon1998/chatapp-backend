@@ -1,11 +1,19 @@
 {
-  "name": "chatapp-backend",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "devDependencies": {
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.3"
-  },
-  "dependencies": {}
+	"name": "chatapp-backend",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"dev": "nodemon ./src/index.ts"
+	},
+	"devDependencies": {
+		"nodemon": "^3.1.0",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.4.3"
+	},
+	"dependencies": {
+		"@types/express": "^4.17.21",
+		"@types/node": "^20.11.30",
+		"express": "^4.19.1"
+	}
 }
