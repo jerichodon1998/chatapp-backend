@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import User from "../../models/User";
+import bcrypt from "bcrypt";
 
 const signinController: RequestHandler<{}, {}, ISignin> = async (req, res) => {
 	const { email, password } = req.body;
@@ -13,16 +14,18 @@ const signinController: RequestHandler<{}, {}, ISignin> = async (req, res) => {
 		if (!foundUser)
 			return res.status(400).json({ message: "Invalid credentials" });
 
-		// if match, return user data without password
+		// if match, compare user hash password and if match return user data with token without password
 		// TODO - compare to hashed password and return an access token
-		if (foundUser.password === password) {
-			const { password, ...rest } = foundUser.toObject();
-			return res.status(200).json(rest);
-		}
-		// if not, return error
-		else {
-			return res.status(400).json({ message: "Invalid credentials" });
-		}
+		await bcrypt.compare(password, foundUser.password).then(function (result) {
+			if (result) {
+				const { password, ...rest } = foundUser.toObject();
+				return res.status(200).json(rest);
+			}
+			// if not, return error
+			else {
+				return res.status(400).json({ message: "Invalid credentials" });
+			}
+		});
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: "Internal Server Error" });

@@ -1,17 +1,22 @@
 import { RequestHandler } from "express";
 import User from "../../models/User";
+import bcrypt from "bcrypt";
 
 const signupController: RequestHandler<{}, {}, ISignup> = async (req, res) => {
 	const { email, password, username } = req.body;
+	const saltRounds = 10;
 
 	try {
-		// TODO - Hash password and return an access token
-		const createUser = await User.create({ email, password, username });
-		if (createUser) {
-			const { password, ...rest } = createUser.toObject();
+		// Store user with hashed password and return an access token with user data without password
+		// TODO - implement tokens for auth
+		bcrypt.hash(password, saltRounds).then(async function (hash) {
+			const createUser = await User.create({ email, password: hash, username });
+			if (createUser) {
+				const { password, ...rest } = createUser.toObject();
 
-			return res.status(201).json(rest);
-		}
+				return res.status(201).json(rest);
+			}
+		});
 	} catch (error: any) {
 		if (error.code === 11000) {
 			// get the first error key
