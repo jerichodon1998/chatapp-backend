@@ -9,7 +9,7 @@ const signupController: RequestHandler<{}, {}, ISignup> = async (req, res) => {
 	try {
 		// Store user with hashed password and return an access token with user data without password
 		// TODO - implement tokens for auth
-		bcrypt.hash(password, saltRounds).then(async function (hash) {
+		await bcrypt.hash(password, saltRounds).then(async function (hash) {
 			const createUser = await User.create({ email, password: hash, username });
 			if (createUser) {
 				const { password, ...rest } = createUser.toObject();
