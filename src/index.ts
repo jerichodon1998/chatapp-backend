@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import "dotenv/config";
+import morgan from "morgan";
 
 import DBConnection from "./database_configurations/DBConnection";
 import auth_routes from "./routes/auth_routes";
@@ -10,6 +11,7 @@ DBConnection.dbConnect();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
 
 app.get("/", async (req: Request, res: Response) => {
 	return res.json("Test");
