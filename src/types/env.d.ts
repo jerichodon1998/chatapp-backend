@@ -3,5 +3,6 @@ namespace NodeJS {
 		ENV: string;
 		PORT: string;
 		DB_URI: string;
+		JWT_KEY: string;
 	}
 }
