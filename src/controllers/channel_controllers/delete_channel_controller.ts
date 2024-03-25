@@ -32,7 +32,7 @@ const deleteChannelTransaction = async (channelId: string, res: Response) => {
 		await session.commitTransaction();
 		session.endSession();
 
-		return res.status(201).json({ message: "Channel deleted" });
+		return res.status(200).json({ message: "Channel deleted" });
 	} catch (error) {
 		// catch error and end session
 		await session.abortTransaction();
