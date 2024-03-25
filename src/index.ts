@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 
 import DBConnection from "./database_configurations/DBConnection";
 import auth_routes from "./routes/auth_routes";
+import channel_routes from "./routes/channel_routes";
+import message_routes from "./routes/message_routes";
 import { verifyToken } from "./middlewares/token_middlewares/jwt_token_middleware";
 
 const app = express();
@@ -26,5 +28,9 @@ app.get("/protected", verifyToken, async (req: Request, res: Response) => {
 
 // authentication path
 app.use("/auth", auth_routes);
+// message path
+app.use("/message", message_routes);
+// channel path
+app.use("/channel", channel_routes);
 
 app.listen(PORT, () => console.log(`Server running on PORT:${PORT}`));
