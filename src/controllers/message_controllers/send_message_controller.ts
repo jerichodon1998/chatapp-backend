@@ -37,20 +37,36 @@ const sendMessageController: RequestHandler<{}, {}, ISendMessageBody> = async (
 	// send message linked to channel
 	else {
 		// check if user and channel exist and get ids
-		const author = await User.findById(authorId, { _id: 1 });
-		const channel = await Channel.findById(channelId, { _id: 1 });
+		try {
+			const author = await User.findById(authorId, { _id: 1 });
 
-		if (!author || !channel) {
-			return res.status(400).json({ message: "author/channel doesn't exist" });
+			if (!author) {
+				return res.status(400).json({ message: "User doesn't exist" });
+			}
+
+			// thi query checks if the author is in the members list, if not, it will return an error
+			const channel = await Channel.findOne({
+				_id: new mongoose.Types.ObjectId(channelId),
+				members: { $in: [author._id] },
+			});
+
+			if (!channel) {
+				return res
+					.status(400)
+					.json({ message: "Channel doesn't exist or User is forbidden" });
+			}
+
+			await Message.create({
+				authorId: author._id,
+				channelId: channel._id,
+				content: content,
+			});
+
+			return res.status(201).json({ message: "Message sent" });
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({ message: "Something went wrong" });
 		}
-
-		await Message.create({
-			authorId: author._id,
-			channelId: channel._id,
-			content: content,
-		});
-
-		return res.status(201).json({ message: "Message sent" });
 	}
 };
 
