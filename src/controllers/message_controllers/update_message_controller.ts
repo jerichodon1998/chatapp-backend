@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import Message from "../../models/Message";
 
 const updateMessageController: RequestHandler<
-	{ messageId: string },
+	IEditMessageReqParam,
 	{},
 	{ content: string }
 > = async (req, res) => {

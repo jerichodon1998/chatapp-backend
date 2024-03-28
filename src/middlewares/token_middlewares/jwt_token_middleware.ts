@@ -45,6 +45,9 @@ export const verifySenderToken: RequestHandler<{}, {}, ISendMessageReqBody> = (
 	}
 };
 
+// NOTE - verifyDeleterToken and verifyEditorToken have the same implementation
+// 		- these functions will vary later on as this application progress
+// TODO - Delete this note after functions vary from each other
 export const verifyDeleterToken: RequestHandler<
 	IDeleteMessageReqParam,
 	{},
@@ -63,5 +66,29 @@ export const verifyDeleterToken: RequestHandler<
 		next();
 	} else {
 		return res.status(404).json({ message: "Forbidden" });
+	}
+};
+
+// NOTE - verifyDeleterToken and verifyEditorToken have the same implementation
+// 		- these functions will vary later on as this application progress
+// TODO - Delete this note after functions vary from each other
+export const verifyEditorToken: RequestHandler<IEditMessageReqParam> = async (
+	req,
+	res,
+	next
+) => {
+	const { messageId } = req.params;
+
+	// verify token
+	const decoded = verifyJwtToken(req);
+
+	// query message if exist and fetch only its authorId
+	const message = await Message.findById(messageId, { authorId: 1 });
+
+	// decoded id from deleter token should match the message author id
+	if (message && message.authorId === new ObjectId(decoded._id)) {
+		next();
+	} else {
+		return res.status(403).json({ message: "Forbidden" });
 	}
 };

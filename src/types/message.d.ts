@@ -14,3 +14,7 @@ interface ISendMessageReqBody {
 interface IDeleteMessageReqParam {
 	messageId: string;
 }
+
+interface IEditMessageReqParam {
+	messageId: string;
+}

@@ -4,13 +4,14 @@ import updateMessageController from "../controllers/message_controllers/update_m
 import deleteMessageController from "../controllers/message_controllers/delete_message_controller";
 import {
 	verifyDeleterToken,
+	verifyEditorToken,
 	verifySenderToken,
 } from "../middlewares/token_middlewares/jwt_token_middleware";
 
 const router = Router();
 
 router.post("/", verifySenderToken, sendMessageController);
-router.put("/:messageId", updateMessageController);
+router.put("/:messageId", verifyEditorToken, updateMessageController);
 router.delete("/:messageId", verifyDeleterToken, deleteMessageController);
 
 export default router;
