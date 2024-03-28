@@ -61,6 +61,6 @@ export const verifyDeleterToken: RequestHandler<
 	if (message && message.authorId === new ObjectId(decoded._id)) {
 		next();
 	} else {
-		return res.status(404).json({ message: "Message not found" });
+		return res.status(404).json({ message: "Forbidden" });
 	}
 };
