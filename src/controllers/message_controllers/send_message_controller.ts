@@ -4,18 +4,11 @@ import User from "../../models/User";
 import Channel from "../../models/Channel";
 import Message from "../../models/Message";
 
-interface ISendMessageBody {
-	content: string;
-	recipientId?: string;
-	authorId: string;
-	channelType: ChannelTypes;
-	channelId?: string;
-}
-
-const sendMessageController: RequestHandler<{}, {}, ISendMessageBody> = async (
-	req,
-	res
-) => {
+const sendMessageController: RequestHandler<
+	{},
+	{},
+	ISendMessageReqBody
+> = async (req, res) => {
 	const { authorId, channelId, channelType, content, recipientId } = req.body;
 
 	// check authorId, content, and channelType
