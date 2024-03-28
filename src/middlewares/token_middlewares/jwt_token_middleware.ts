@@ -58,6 +58,7 @@ export const verifyDeleterToken: RequestHandler<
 	// query message if exist and fetch only its authorId
 	const message = await Message.findById(messageId, { authorId: 1 });
 
+	// decoded id from deleter token should match the message author id
 	if (message && message.authorId === new ObjectId(decoded._id)) {
 		next();
 	} else {
