@@ -10,3 +10,7 @@ interface ISendMessageReqBody {
 	channelType: ChannelTypes;
 	channelId?: string;
 }
+
+interface IDeleteMessageReqParam {
+	messageId: string;
+}

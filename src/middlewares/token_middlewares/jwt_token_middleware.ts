@@ -1,6 +1,8 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { decodeToken } from "../../helpers/token_helper";
+import Message from "../../models/Message";
+import { ObjectId } from "mongodb";
 
 const JWT_KEY =
 	process.env.ENV === "production" ? process.env.JWT_KEY : "secretkey";
@@ -50,5 +52,25 @@ export const verifySenderToken: RequestHandler<{}, {}, ISendMessageReqBody> = (
 	} else {
 		console.log("No Token");
 		return res.status(403).json({ message: "Forbidden" });
+	}
+};
+
+export const verifyDeleterToken: RequestHandler<
+	IDeleteMessageReqParam,
+	{},
+	{}
+> = async (req, res, next) => {
+	const { messageId } = req.params;
+
+	// verify token
+	const decoded = decodeToken(req);
+
+	// query message if exist and fetch only its authorId
+	const message = await Message.findById(messageId, { authorId: 1 });
+
+	if (message && message.authorId === new ObjectId(decoded._id)) {
+		next();
+	} else {
+		return res.status(404).json({ message: "Message not found" });
 	}
 };

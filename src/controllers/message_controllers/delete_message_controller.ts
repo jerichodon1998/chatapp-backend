@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import Message from "../../models/Message";
 
-const deleteMessageController: RequestHandler<{ messageId: string }> = async (
+const deleteMessageController: RequestHandler<IDeleteMessageReqParam> = async (
 	req,
 	res
 ) => {
