@@ -31,11 +31,13 @@ export const verifySenderToken: RequestHandler<{}, {}, ISendMessageReqBody> = (
 	next
 ) => {
 	const { Bearer } = req.cookies;
-	// verify token
+	// check if token exist
 	if (Bearer) {
 		try {
+			// verify token
 			const decodedToken = decodeToken(req);
-			// The sender matches the id from the decoded access token
+			// The sender should match the id from the decoded access token
+			// return 403 if not
 			if (decodedToken._id === req.body.authorId) {
 				next();
 			} else {
