@@ -16,7 +16,7 @@ export const attachTokenToCookie = (accessToken: string, res: Response) => {
 	});
 };
 
-export const decodeToken = (req: Request<any>): JwtPayload & IToken => {
+export const verifyJwtToken = (req: Request<any>): JwtPayload & IToken => {
 	const { Bearer } = req.cookies;
 	try {
 		const decoded = jwt.verify(Bearer, JWT_KEY) as IToken & JwtPayload;
