@@ -16,13 +16,12 @@ export const attachTokenToCookie = (accessToken: string, res: Response) => {
 	});
 };
 
-export const decodeToken = (req: Request): (JwtPayload & IToken) | null => {
+export const decodeToken = (req: Request): JwtPayload & IToken => {
 	const { Bearer } = req.cookies;
 	try {
 		const decoded = jwt.verify(Bearer, JWT_KEY) as IToken & JwtPayload;
 		return decoded;
 	} catch (error) {
-		console.log(error);
-		return null;
+		throw new Error("Invalid Token");
 	}
 };
