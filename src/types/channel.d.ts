@@ -5,3 +5,7 @@ interface IChannel {
 	members: [object];
 	channelType: ChannelTypes;
 }
+
+interface IFetchChannelReqParam {
+	channelId: string;
+}

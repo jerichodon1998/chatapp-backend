@@ -2,6 +2,8 @@ import { RequestHandler } from "express";
 import { verifyJwtToken } from "../../helpers/token_helper";
 import Message from "../../models/Message";
 import { ObjectId } from "mongodb";
+import Channel from "../../models/Channel";
+import mongoose from "mongoose";
 
 export const verifyToken: RequestHandler = async (req, res, next) => {
 	// verify token
@@ -89,6 +91,36 @@ export const verifyEditorToken: RequestHandler<IEditMessageReqParam> = async (
 	if (message && message.authorId === new ObjectId(decoded._id)) {
 		next();
 	} else {
+		return res.status(403).json({ message: "Forbidden" });
+	}
+};
+
+// verifies if the requester is a member of the channel
+export const verifyChannelMember: RequestHandler<
+	IFetchChannelReqParam
+> = async (req, res, next) => {
+	const { channelId } = req.params;
+	try {
+		// verify and decode token
+		const decoded = verifyJwtToken(req);
+
+		// query channel with the channelId and if the user's id (from the jwt payload) is included in the members' list
+		const channelObjectId = new mongoose.Types.ObjectId(channelId);
+		const userObjectId = new mongoose.Types.ObjectId(decoded._id);
+		const channel = await Channel.findOne({
+			_id: channelObjectId,
+			members: { $in: userObjectId },
+		});
+
+		// if channel is not empty go to next()
+		// else return 403
+		if (channel) {
+			next();
+		} else {
+			return res.status(403).json({ message: "Forbidden" });
+		}
+	} catch (error) {
+		console.log(error);
 		return res.status(403).json({ message: "Forbidden" });
 	}
 };
