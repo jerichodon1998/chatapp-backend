@@ -6,6 +6,6 @@ import { verifyChannelMember } from "../middlewares/token_middlewares/jwt_token_
 const router = Router();
 
 router.get("/:channelId", verifyChannelMember, fetchChannelController);
-router.delete("/:channelId", deleteChannelController);
+router.delete("/:channelId", verifyChannelMember, deleteChannelController);
 
 export default router;
