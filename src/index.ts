@@ -4,10 +4,10 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 
 import DBConnection from "./database_configurations/DBConnection";
-import auth_routes from "./routes/auth_routes";
-import channel_routes from "./routes/channel_routes";
-import message_routes from "./routes/message_routes";
-import { verifyToken } from "./middlewares/token_middlewares/jwt_token_middleware";
+import auth_routes from "./rest_api/routes/auth_routes";
+import channel_routes from "./rest_api/routes/channel_routes";
+import message_routes from "./rest_api/routes/message_routes";
+import { verifyToken } from "./rest_api/middlewares/token_middlewares/jwt_token_middleware";
 
 const app = express();
 const PORT = process.env.ENV === "production" ? process.env.PORT : 3001;

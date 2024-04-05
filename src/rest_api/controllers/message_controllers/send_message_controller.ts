@@ -1,8 +1,8 @@
 import { RequestHandler, Response } from "express";
 import mongoose from "mongoose";
-import User from "../../models/User";
-import Channel from "../../models/Channel";
-import Message from "../../models/Message";
+import User from "../../../models/User";
+import Channel from "../../../models/Channel";
+import Message from "../../../models/Message";
 
 const sendMessageController: RequestHandler<
 	{},

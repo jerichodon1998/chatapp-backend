@@ -1,7 +1,7 @@
 import { RequestHandler, Response } from "express";
 import mongoose from "mongoose";
-import Message from "../../models/Message";
-import Channel from "../../models/Channel";
+import Message from "../../../models/Message";
+import Channel from "../../../models/Channel";
 
 // delete channel along with messages linked to it applying transaction
 const deleteChannelTransaction = async (channelId: string, res: Response) => {

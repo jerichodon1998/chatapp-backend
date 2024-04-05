@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import Channel from "../../models/Channel";
+import Channel from "../../../models/Channel";
 import mongoose from "mongoose";
 
 const fetchChannelController: RequestHandler<IFetchChannelReqParam> = async (

@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
-import { verifyJwtToken } from "../../helpers/token_helper";
-import Message from "../../models/Message";
+import { verifyJwtToken } from "../../../helpers/token_helper";
+import Message from "../../../models/Message";
 import { ObjectId } from "mongodb";
-import Channel from "../../models/Channel";
+import Channel from "../../../models/Channel";
 import mongoose from "mongoose";
 
 export const verifyToken: RequestHandler = async (req, res, next) => {

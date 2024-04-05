@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import Message from "../../models/Message";
+import Message from "../../../models/Message";
 
 const deleteMessageController: RequestHandler<IDeleteMessageReqParam> = async (
 	req,
