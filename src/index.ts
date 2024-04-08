@@ -14,9 +14,9 @@ const httpServer = createServer(app);
 // initialize socketio
 socketServer.initializeServer(httpServer);
 // get io instance
-const { io } = socketServer;
+const io = socketServer.getServer();
 // test socket
-io?.on("connection", (socket) => {
+io.on("connection", (socket) => {
 	console.log("connected: ", socket.id);
 	socket.on("message", (msg) => {
 		console.log("main namespace:", msg);
