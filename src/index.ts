@@ -2,7 +2,7 @@ import "dotenv/config";
 import { createServer } from "http";
 import DBConnection from "./database_configurations/DBConnection";
 import app from "./rest_api";
-import { getIOServer, initializeSocketServer } from "./real_time";
+import socketServer from "./real_time";
 
 const PORT = process.env.ENV === "production" ? process.env.PORT : 3001;
 
@@ -12,17 +12,15 @@ DBConnection.dbConnect();
 // create httpServer with createServer and express app
 const httpServer = createServer(app);
 // initialize socketio
-initializeSocketServer(httpServer);
+socketServer.initializeServer(httpServer);
 // get io instance
-const io = getIOServer();
-
+const { io } = socketServer;
 // test socket
-io.on("connection", (socket) => {
+io?.on("connection", (socket) => {
 	console.log("connected: ", socket.id);
-
 	socket.on("message", (msg) => {
-		console.log(msg);
-		socket.emit("message", msg);
+		console.log("main namespace:", msg);
+		socket.emit(msg);
 	});
 });
 

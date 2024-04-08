@@ -1,23 +1,14 @@
-import { Server, ServerOptions } from "socket.io";
+import { Server } from "socket.io";
 import { Server as httpServer } from "http";
+class SocketServer {
+	io?: Server;
 
-let io: null | Server = null;
-
-// initialize socketio server
-export const initializeSocketServer = (
-	server: httpServer,
-	options?: ServerOptions
-) => {
-	io = new Server(server, options);
-};
-
-// get socketio server
-export const getIOServer = () => {
-	if (!io) {
-		throw new Error(
-			"Initialize socket server - invoke 'initializeSocketServer()'"
-		);
+	initializeServer(server: httpServer) {
+		this.io = new Server(server);
 	}
 
-	return io;
-};
+	// TODO - initialize namespaces
+}
+const socketServer = new SocketServer();
+
+export default socketServer;
