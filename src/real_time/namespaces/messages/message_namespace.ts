@@ -1,5 +1,5 @@
 import { Namespace, Server } from "socket.io";
-import { messageHandler } from "../../handlers/message_handlers";
+import { messageSendHandler } from "../../handlers/message_handlers";
 
 // TODO - apply auth
 // TODO - validation/sanitization of user inputs
@@ -28,7 +28,7 @@ class CustomNamespace {
 			// SUGGESTION - add a field on Channels Schema where the two IDs of the direct channelType
 			// 				- be concatenated as a string with '-' e.g. userId1-userId2
 			// 				- and use it to create unique index
-			socket.on("message:send", messageHandler);
+			socket.on("message:send", messageSendHandler);
 		});
 	}
 

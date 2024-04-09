@@ -6,7 +6,7 @@ import messageNamespace from "../namespaces/messages/message_namespace";
 
 type CallbackResponse = (response: { status: number; message: string }) => void;
 
-export const messageHandler = async (
+export const messageSendHandler = async (
 	payload: ISendMessageReqBody,
 	callback: CallbackResponse
 ) => {
