@@ -21,7 +21,8 @@ class CustomNamespace {
 		// namespace test
 		this.#messageNamespace.on("connection", (socket) => {
 			console.log("namespace connected", socket.id);
-			socket.on("message", messageHandler);
+
+			socket.on("message:send", messageHandler);
 		});
 	}
 
