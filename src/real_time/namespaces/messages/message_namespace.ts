@@ -1,6 +1,7 @@
 import { Namespace, Server } from "socket.io";
 import { messageSendHandler } from "../../handlers/message_handlers/message_send_handler";
 import { messageDeleteHandler } from "../../handlers/message_handlers/message_delete_handler";
+import { messageUpdateHandler } from "../../handlers/message_handlers/message_update_handler";
 
 // TODO - apply auth
 // TODO - validation/sanitization of user inputs
@@ -31,6 +32,7 @@ class CustomNamespace {
 			// 				- and use it to create unique index
 			socket.on("message:send", messageSendHandler);
 			socket.on("message:delete", messageDeleteHandler);
+			socket.on("message:update", messageUpdateHandler);
 		});
 	}
 
