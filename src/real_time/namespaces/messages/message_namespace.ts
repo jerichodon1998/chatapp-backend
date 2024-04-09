@@ -1,5 +1,5 @@
 import { Namespace, Server } from "socket.io";
-import { messageSendHandler } from "../../handlers/message_handlers";
+import { messageSendHandler } from "../../handlers/message_handlers/message_send_handler";
 
 // TODO - apply auth
 // TODO - validation/sanitization of user inputs

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import Channel from "../../models/Channel";
-import User from "../../models/User";
-import Message from "../../models/Message";
-import messageNamespace from "../namespaces/messages/message_namespace";
+import Channel from "../../../models/Channel";
+import User from "../../../models/User";
+import Message from "../../../models/Message";
+import messageNamespace from "../../namespaces/messages/message_namespace";
 
 type CallbackResponse = (response: { status: number; message: string }) => void;
 
