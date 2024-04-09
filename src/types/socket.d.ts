@@ -5,3 +5,7 @@ type ICallbackResponse = (response: {
 
 interface ISendMessageSocketPayload extends ISendMessage {}
 interface IDeleteMessageSocketPayload extends IDeleteMessageReqParam {}
+interface IEditMessageSocketPayload {
+	messageId: string;
+	content: string;
+}
