@@ -6,7 +6,7 @@ import messageNamespace from "../../namespaces/messages/message_namespace";
 
 export const messageSendHandler = async (
 	payload: ISendMessageSocketPayload,
-	callback: CallbackResponse
+	callback: ICallbackResponse
 ) => {
 	// get message namespace
 	const messagenp = messageNamespace.getNamespace();
@@ -73,7 +73,7 @@ const channelMessageTransaction = async (
 	channelType: string,
 	content: string,
 	recipientId: string,
-	callback: CallbackResponse
+	callback: ICallbackResponse
 ) => {
 	// get message namespace
 	const messagenp = messageNamespace.getNamespace();
