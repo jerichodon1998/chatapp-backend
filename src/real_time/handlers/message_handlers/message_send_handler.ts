@@ -4,10 +4,8 @@ import User from "../../../models/User";
 import Message from "../../../models/Message";
 import messageNamespace from "../../namespaces/messages/message_namespace";
 
-type CallbackResponse = (response: { status: number; message: string }) => void;
-
 export const messageSendHandler = async (
-	payload: ISendMessageReqBody,
+	payload: ISendMessageSocketPayload,
 	callback: CallbackResponse
 ) => {
 	// get message namespace
