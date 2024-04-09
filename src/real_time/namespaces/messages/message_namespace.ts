@@ -1,5 +1,6 @@
 import { Namespace, Server } from "socket.io";
 import { messageSendHandler } from "../../handlers/message_handlers/message_send_handler";
+import { messageDeleteHandler } from "../../handlers/message_handlers/message_delete_handler";
 
 // TODO - apply auth
 // TODO - validation/sanitization of user inputs
@@ -29,6 +30,7 @@ class CustomNamespace {
 			// 				- be concatenated as a string with '-' e.g. userId1-userId2
 			// 				- and use it to create unique index
 			socket.on("message:send", messageSendHandler);
+			socket.on("message:delete", messageDeleteHandler);
 		});
 	}
 
