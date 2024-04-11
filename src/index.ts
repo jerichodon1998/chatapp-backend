@@ -18,9 +18,10 @@ const io = socketServer.getServer();
 // test socket
 io.on("connection", (socket) => {
 	console.log("connected: ", socket.id);
-	socket.on("message", (msg) => {
+	socket.on("message", (msg, callback) => {
 		console.log("main namespace:", msg);
-		socket.emit(msg);
+		callback({ status: 200, message: "Message sent" });
+		socket.emit("message", msg);
 	});
 });
 
