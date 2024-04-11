@@ -2,6 +2,7 @@ import { Namespace, Server } from "socket.io";
 import { messageSendHandler } from "../../handlers/message_handlers/message_send_handler";
 import { messageDeleteHandler } from "../../handlers/message_handlers/message_delete_handler";
 import { messageUpdateHandler } from "../../handlers/message_handlers/message_update_handler";
+import messageMiddlewares from "../../middlewares/message_middlewares";
 
 // TODO - apply auth
 // TODO - validation/sanitization of user inputs
@@ -23,6 +24,11 @@ class CustomNamespace {
 		// namespace test
 		this.#messageNamespace.on("connection", (socket) => {
 			console.log("namespace connected", socket.id);
+
+			// middleware
+			socket.use(([event, ...args], next) => {
+				messageMiddlewares(event, args, next, socket);
+			});
 			// TODO - send message should be able to distinguish
 			// 		- direct(private messages) channels with unique combinations of members
 
