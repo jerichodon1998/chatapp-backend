@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { Socket } from "socket.io";
 
 const JWT_KEY =
 	process.env.ENV === "production" ? process.env.JWT_KEY : "secretkey";
@@ -16,10 +17,17 @@ export const attachTokenToCookie = (accessToken: string, res: Response) => {
 	});
 };
 
-export const verifyJwtToken = (req: Request<any>): JwtPayload & IToken => {
-	const { Bearer } = req.cookies;
+export const verifyJwtToken = (
+	req: Request<any> | Socket
+): JwtPayload & IToken => {
+	let bearer = null;
+	if (req instanceof Socket) {
+		bearer = req.handshake.headers.cookie?.split("=")[1];
+	} else {
+		bearer = req.cookies["Bearer"];
+	}
 	try {
-		const decoded = jwt.verify(Bearer, JWT_KEY) as IToken & JwtPayload;
+		const decoded = jwt.verify(bearer, JWT_KEY) as IToken & JwtPayload;
 		return decoded;
 	} catch (error) {
 		console.log(error);
