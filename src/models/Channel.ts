@@ -8,4 +8,8 @@ const channelSchema = new Schema<IChannel>({
 
 const Channel = model<IChannel>("Channel", channelSchema);
 
+// TODO - create collection or update existing collection
+// 			Apply options:
+// 				enable changeStreamPreAndPostImages (for real time updates)
+
 export default Channel;

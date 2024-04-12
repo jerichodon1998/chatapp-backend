@@ -8,4 +8,8 @@ const userSchema = new Schema<IUser>({
 
 const User = model<IUser>("User", userSchema);
 
+// TODO - create collection or update existing collection
+// 			Apply options:
+// 				enable changeStreamPreAndPostImages (for real time updates)
+
 export default User;

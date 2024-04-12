@@ -8,4 +8,8 @@ const messageSchema = new Schema<IMessage>({
 
 const Message = model<IMessage>("Message", messageSchema);
 
+// TODO - create collection or update existing collection
+// 			Apply options:
+// 				enable changeStreamPreAndPostImages (for real time updates)
+
 export default Message;
