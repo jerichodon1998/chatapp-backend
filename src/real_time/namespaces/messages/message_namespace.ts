@@ -60,10 +60,6 @@ class CustomNamespace {
 			// TODO - send message should be able to distinguish
 			// 		- direct(private messages) channels with unique combinations of members
 
-			// NOTE - mongodb indexes doesn't have a unique permutation on array elements
-			// SUGGESTION - add a field on Channels Schema where the two IDs of the direct channelType
-			// 				- be concatenated as a string with '-' e.g. userId1-userId2
-			// 				- and use it to create unique index
 			socket.on("message:send", messageSendHandler);
 			socket.on("message:delete", messageDeleteHandler);
 			socket.on("message:update", messageUpdateHandler);

@@ -1,5 +1,7 @@
 import { Schema, model } from "mongoose";
 
+// TODO - add field that holds all the channelId(s) that the user is involved in.
+// NOTE - See also the TODO from the Channel's Model. I think either of one is a good solution.
 const userSchema = new Schema<IUser>({
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true, unique: true },
