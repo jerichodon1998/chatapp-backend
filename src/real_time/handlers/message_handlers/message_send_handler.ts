@@ -2,15 +2,11 @@ import mongoose from "mongoose";
 import Channel from "../../../models/Channel";
 import User from "../../../models/User";
 import Message from "../../../models/Message";
-import messageNamespace from "../../namespaces/messages/message_namespace";
 
 export const messageSendHandler = async (
 	payload: ISendMessageSocketPayload,
 	callback: ICallbackResponse
 ) => {
-	// get message namespace
-	const messagenp = messageNamespace.getNamespace();
-
 	const { authorId, content, channelId, channelType, recipientId } = payload;
 
 	// check authorId, content, channelType and both of channelId and recipientId is empty
@@ -52,13 +48,12 @@ export const messageSendHandler = async (
 				});
 			}
 
-			const createdMessage = await Message.create({
+			await Message.create({
 				authorId: author._id,
 				channelId: channel._id,
 				content: content,
 			});
 
-			messagenp.emit("message", createdMessage);
 			return callback({ status: 201, message: "Message sent" });
 		} catch (error) {
 			console.log(error);
@@ -75,8 +70,6 @@ const channelMessageTransaction = async (
 	recipientId: string,
 	callback: ICallbackResponse
 ) => {
-	// get message namespace
-	const messagenp = messageNamespace.getNamespace();
 	// check if both users exist
 	const author = await User.findById(authorId);
 	const recipient = await User.findById(recipientId);
@@ -108,7 +101,7 @@ const channelMessageTransaction = async (
 		);
 
 		// create message and link it to channel
-		const createdMessage = await Message.create(
+		await Message.create(
 			[
 				{
 					authorId: author?._id,
@@ -123,7 +116,6 @@ const channelMessageTransaction = async (
 		await session.commitTransaction();
 		session.endSession();
 
-		messagenp.emit("message", createdMessage);
 		return callback({ status: 201, message: "Message sent" });
 	} catch (error) {
 		// catch error and end session
