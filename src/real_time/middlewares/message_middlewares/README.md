@@ -1,7 +1,6 @@
 # MESSAGE MIDDLEWARES
 
-[!NOTE]
-
+> [!NOTE]
 > Bearer token(JWT) is used to allow/disallow a user to perform certain requests
 
 1. messageSendMiddleware - checks if the request(user) is authorized to send a message
