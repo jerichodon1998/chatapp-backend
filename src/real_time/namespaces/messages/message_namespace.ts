@@ -115,6 +115,7 @@ class CustomNamespace {
 						this.#messageNamespace
 							.to(data.fullDocumentBeforeChange?.channelId.toString())
 							.emit("message:delete", data);
+						break;
 				}
 			}
 		);
