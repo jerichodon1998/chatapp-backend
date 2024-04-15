@@ -14,7 +14,7 @@ export default async (
 	// apply middleware to corresponding event name
 	switch (event) {
 		case "message:send":
-			messageSendMiddleware(args, next, socket);
+			await messageSendMiddleware(args, next, socket);
 			break;
 		case "message:delete":
 			await messageDeleteMiddleware(args, next, socket);
