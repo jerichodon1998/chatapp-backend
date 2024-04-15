@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import { Server as httpServer } from "http";
 import messageNamespace from "./namespaces/messages/message_namespace";
+import channelNamespace from "./namespaces/channel/channel_namespace";
 class SocketServer {
 	#io?: Server;
 
@@ -29,6 +30,7 @@ class SocketServer {
 		const io = this.getServer();
 
 		messageNamespace.initializeNamespace(io);
+		channelNamespace.initializeNamespace(io);
 	}
 }
 const socketServer = new SocketServer();
