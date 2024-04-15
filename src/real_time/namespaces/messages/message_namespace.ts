@@ -32,9 +32,10 @@ class CustomNamespace {
 				},
 			});
 
-			channels.forEach((element) => {
-				socket.join(element._id.toString());
-			});
+			for (let i = 0; i < channels.length; i++) {
+				await socket.join(channels[i]._id.toString());
+			}
+
 			console.log("join room(s) done");
 		} catch (error) {
 			console.log(error);
