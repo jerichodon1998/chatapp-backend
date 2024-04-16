@@ -11,6 +11,7 @@ interface ISendMessage {
 	channelType: ChannelTypes;
 	channelId?: string;
 }
+/* Express API */
 interface ISendMessageReqBody extends ISendMessage {}
 
 interface IDeleteMessageReqParam {
@@ -19,4 +20,14 @@ interface IDeleteMessageReqParam {
 
 interface IEditMessageReqParam {
 	messageId: string;
+}
+
+/* Socket.io */
+interface ISendMessageSocketPayload extends ISendMessage {}
+interface IDeleteMessageSocketPayload {
+	messageId: string;
+}
+interface IEditMessageSocketPayload {
+	messageId: string;
+	content: string;
 }
