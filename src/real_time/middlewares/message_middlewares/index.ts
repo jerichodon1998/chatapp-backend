@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
 import { verifyJwtToken } from "../../../helpers/token_helper";
 import Message from "../../../models/Message";
+import { ICallbackResponse } from "../../../types/socket";
 
 export default async (
 	event: string,
