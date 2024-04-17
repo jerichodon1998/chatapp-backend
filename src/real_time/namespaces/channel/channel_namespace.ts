@@ -1,69 +1,28 @@
-import { Namespace, Server, Socket } from "socket.io";
 import { verifyJwtToken } from "../../../helpers/token_helper";
 import Channel from "../../../models/Channel";
 import { ObjectId } from "mongodb";
 import { mongo } from "mongoose";
+import CustomNamespace from "../../socket_models/CustomNamespace";
 
-class CustomNamespace {
-	#channelNamespace?: Namespace;
-	#socket?: Socket;
-
-	initializeNamespace(io: Server) {
-		// create a custom namespace
-		this.#channelNamespace = io.of("/channels");
-
-		this.#registerEvents();
-		this.#serverSentEvents();
+class ChannelManager extends CustomNamespace {
+	constructor(name: string) {
+		super(name);
 	}
 
-	// TODO - improve join rooms
-	// NOTE - Can improve this by creating a list of the user's joined channels
-	async #joinRooms() {
-		if (!this.#socket?.id) {
-			throw new Error("Need to initialize namespace first");
-		}
-
-		try {
-			// verify token
-			const decodedToken = verifyJwtToken(this.#socket);
-			// fetch channels where the user is a member through the _id payload from token
-			const channels = await Channel.find({
-				members: {
-					$in: new ObjectId(decodedToken._id),
-				},
-			});
-			// join rooms
-			for (let i = 0; i < channels.length; i++) {
-				await this.#socket.join(channels[i]._id.toString());
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	}
-
-	// join to a single room
-	// this is used after a channel creating/insert
-	async #joinRoom(channelId: string) {
-		if (!this.#socket?.id) {
-			throw new Error("Need to initialize namespace first");
-		}
-
-		await this.#socket.join(channelId);
-	}
-
-	#registerEvents() {
-		if (!this.#channelNamespace) {
+	// override
+	socketEvents() {
+		if (!this.namespace) {
 			throw new Error("Need to initialize namespace first");
 		}
 
 		// namespace connection
-		this.#channelNamespace.on("connection", async (socket) => {
-			console.log("channel namespace connected", socket.id);
+		this.namespace.on("connection", async (socket) => {
+			console.log(`${this.name} namespace connected`, socket.id);
 			// connection socket
-			this.#socket = socket;
+			this.socket = socket;
 
 			// invoke join rooms
-			await this.#joinRooms();
+			await this.joinRooms();
 
 			// NOTE - 'direct' channelType messages auto creates channel (checkout message:send handler)
 			// TODO - Implement create channel (typically used for groups because direct has auto-create channel)
@@ -78,17 +37,17 @@ class CustomNamespace {
 			// 			Same thing goes to update and create.
 
 			// Leave all rooms on disconnection
-			this.#socket.on("disconnection", async () => {
+			this.socket.on("disconnection", async () => {
 				const joinedRooms = socket.rooms;
 
 				for (const room of joinedRooms) {
-					await this.#socket?.leave(room);
+					await this.socket?.leave(room);
 				}
 			});
 		});
 	}
 
-	async #serverSentEvents() {
+	async serverSentEvents() {
 		Channel.watch([], {
 			// Set fullDocument to "updateLookup" to direct watch() to look up the most current
 			// majority-committed version of the updated document.
@@ -117,11 +76,11 @@ class CustomNamespace {
 					| mongo.ChangeStreamReshardCollectionDocument
 					| mongo.ChangeStreamRefineCollectionShardKeyDocument
 			) => {
-				if (!this.#channelNamespace) {
+				if (!this.namespace) {
 					throw new Error("Need to initialize namespace first");
 				}
 
-				if (!this.#socket?.id) {
+				if (!this.socket?.id) {
 					throw new Error("Need to initialize namespace first");
 				}
 
@@ -129,47 +88,40 @@ class CustomNamespace {
 				switch (data.operationType) {
 					case "insert":
 						// check if user is a member of the channel
-						const decoded = verifyJwtToken(this.#socket);
+						const decoded = verifyJwtToken(this.socket);
 						const channel = await Channel.findOne({
 							_id: data.fullDocument._id.toString(),
 							members: { $in: [new ObjectId(decoded._id)] },
 						});
 						if (channel) {
 							// join new created/inserted room
-							await this.#joinRoom(data.fullDocument._id.toString());
-							this.#channelNamespace
+							await this.joinRoom(data.fullDocument._id.toString());
+							this.namespace
 								.to(data.fullDocument._id.toString())
 								.emit("channel:create", data);
 						}
 						break;
 					case "update":
-						this.#channelNamespace
+						this.namespace
 							.to(data.fullDocument?._id.toString())
 							.emit("channel:update", data);
 						break;
 					case "delete":
-						// leave room(channel)
-						await this.#socket.leave(
-							data.fullDocumentBeforeChange?._id.toString()
-						);
 						// emit delete data
-						this.#channelNamespace
+						this.namespace
 							.to(data.fullDocumentBeforeChange?._id.toString())
 							.emit("channel:delete", data);
+						// leave room(channel)
+						await this.socket.leave(
+							data.fullDocumentBeforeChange?._id.toString()
+						);
 						break;
 				}
 			}
 		);
 	}
-	getNamespace() {
-		if (!this.#channelNamespace) {
-			throw new Error("Need to initialize namespace first");
-		}
-
-		return this.#channelNamespace;
-	}
 }
 
-const channelNamespace = new CustomNamespace();
+const channelNamespace = new ChannelManager("channels");
 
 export default channelNamespace;
