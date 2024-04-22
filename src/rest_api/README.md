@@ -2,4 +2,4 @@
 
 ### To-do
 
-[ ] Update all put routes to patch
+- [ ] Update all put routes to patch
