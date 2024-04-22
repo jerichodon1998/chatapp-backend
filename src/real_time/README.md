@@ -6,3 +6,7 @@ Handles all of the real time updates for this application. JWT token is used to 
 
 1. message_namespace - handles message events. For more information, check message_namespace README.md
 2. channel_namespace - handles channel server sent events (event listeners not yet(might not be) implemented)
+
+### To-do
+
+- [ ] Implement Conditional Types in CustomNamespace, also read more about generic types in Typescript
