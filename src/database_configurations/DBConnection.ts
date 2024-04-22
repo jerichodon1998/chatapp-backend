@@ -14,8 +14,17 @@ class DBConnection implements ConnectionInterface {
 	// initialize connection
 	dbConnect = async () => {
 		try {
-			await mongoose.connect(DB_URI).then(() => {
+			await mongoose.connect(DB_URI).then(async (db) => {
 				console.log(`DB connected ${mongoose.connection.db.databaseName}`);
+
+				// configure changeStreamOptions preAndPostImages: { expireAfterSeconds: 100 }
+				await db.connection.db.admin().command({
+					setClusterParameter: {
+						changeStreamOptions: {
+							preAndPostImages: { expireAfterSeconds: 100 },
+						},
+					},
+				});
 			});
 		} catch (error) {
 			console.log(error);

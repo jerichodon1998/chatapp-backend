@@ -13,8 +13,16 @@ const channelSchema = new Schema<IChannel>({
 
 const Channel = model<IChannel>("Channel", channelSchema);
 
-// TODO - create collection or update existing collection
-// 			Apply options:
-// 				enable changeStreamPreAndPostImages (for real time updates)
+// create collection if it doesn't exist
+// 		Apply options:
+// 			enable changeStreamPreAndPostImages (for real time updates)
+Channel.createCollection({
+	changeStreamPreAndPostImages: { enabled: true },
+})
+	.then((col) => {
+		const { collectionName } = col;
+		console.log(`${collectionName} collection created`);
+	})
+	.catch((e) => console.log(e));
 
 export default Channel;

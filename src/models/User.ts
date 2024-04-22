@@ -11,8 +11,16 @@ const userSchema = new Schema<IUser>({
 
 const User = model<IUser>("User", userSchema);
 
-// TODO - create collection or update existing collection
-// 			Apply options:
-// 				enable changeStreamPreAndPostImages (for real time updates)
+// create collection or update existing collection
+// 		Apply options:
+// 			enable changeStreamPreAndPostImages (for real time updates)
+User.createCollection({
+	changeStreamPreAndPostImages: { enabled: true },
+})
+	.then((col) => {
+		const { collectionName } = col;
+		console.log(`${collectionName} collection created`);
+	})
+	.catch((e) => console.log(e));
 
 export default User;

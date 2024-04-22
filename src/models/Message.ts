@@ -8,8 +8,16 @@ const messageSchema = new Schema<IMessage>({
 
 const Message = model<IMessage>("Message", messageSchema);
 
-// TODO - create collection or update existing collection
-// 			Apply options:
-// 				enable changeStreamPreAndPostImages (for real time updates)
+// create collection or update existing collection
+// 		Apply options:
+// 			enable changeStreamPreAndPostImages (for real time updates)
+Message.createCollection({
+	changeStreamPreAndPostImages: { enabled: true },
+})
+	.then((col) => {
+		const { collectionName } = col;
+		console.log(`${collectionName} collection created`);
+	})
+	.catch((e) => console.log(e));
 
 export default Message;
