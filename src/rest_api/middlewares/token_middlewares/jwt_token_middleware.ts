@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import { verifyJwtToken } from "../../../helpers/token_helper";
 import Message from "../../../models/Message";
-import { ObjectId } from "mongodb";
 import Channel from "../../../models/Channel";
 import mongoose from "mongoose";
 
@@ -64,7 +63,7 @@ export const verifyDeleterToken: RequestHandler<
 	const message = await Message.findById(messageId, { authorId: 1 });
 
 	// decoded id from deleter token should match the message author id
-	if (message && message.authorId === new ObjectId(decoded._id)) {
+	if (message && message.authorId.toString() === decoded._id) {
 		next();
 	} else {
 		return res.status(404).json({ message: "Forbidden" });
@@ -88,7 +87,7 @@ export const verifyEditorToken: RequestHandler<IEditMessageReqParam> = async (
 	const message = await Message.findById(messageId, { authorId: 1 });
 
 	// decoded id from deleter token should match the message author id
-	if (message && message.authorId === new ObjectId(decoded._id)) {
+	if (message && message.authorId.toString() === decoded._id) {
 		next();
 	} else {
 		return res.status(403).json({ message: "Forbidden" });
