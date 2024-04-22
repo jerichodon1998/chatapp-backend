@@ -11,7 +11,7 @@ import {
 const router = Router();
 
 router.post("/", verifySenderToken, sendMessageController);
-router.put("/:messageId", verifyEditorToken, updateMessageController);
+router.patch("/:messageId", verifyEditorToken, updateMessageController);
 router.delete("/:messageId", verifyDeleterToken, deleteMessageController);
 
 export default router;
