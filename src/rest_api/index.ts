@@ -28,8 +28,8 @@ app.get("/protected", verifyToken, async (req: Request, res: Response) => {
 // authentication path
 app.use("/auth", auth_routes);
 // message path
-app.use("/message", message_routes);
+app.use("/messages", message_routes);
 // channel path
-app.use("/channel", channel_routes);
+app.use("/channels", channel_routes);
 
 export default app;
