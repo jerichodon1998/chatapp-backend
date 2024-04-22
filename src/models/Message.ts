@@ -8,7 +8,7 @@ const messageSchema = new Schema<IMessage>({
 
 const Message = model<IMessage>("Message", messageSchema);
 
-// create collection or update existing collection
+// create collection if it doesn't exist
 // 		Apply options:
 // 			enable changeStreamPreAndPostImages (for real time updates)
 Message.createCollection({

@@ -11,7 +11,7 @@ const userSchema = new Schema<IUser>({
 
 const User = model<IUser>("User", userSchema);
 
-// create collection or update existing collection
+// create collection if it doesn't exist
 // 		Apply options:
 // 			enable changeStreamPreAndPostImages (for real time updates)
 User.createCollection({
