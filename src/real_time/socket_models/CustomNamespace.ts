@@ -2,14 +2,14 @@ import { Namespace, Server, Socket } from "socket.io";
 import { verifyJwtToken } from "../../helpers/token_helper";
 import Channel from "../../models/Channel";
 import { ObjectId } from "mongodb";
-import { ICustomNamespace } from "../../types/socket";
+import { ICustomNamespace, NamespaceNames } from "../../types/socket";
 
 export default class CustomNamespace implements ICustomNamespace {
-	name: string;
+	name: NamespaceNames;
 	namespace: Namespace | undefined;
 	socket: Socket | undefined;
 
-	constructor(name: string) {
+	constructor(name: NamespaceNames) {
 		this.name = name;
 	}
 

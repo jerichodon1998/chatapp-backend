@@ -6,8 +6,10 @@ export type ICallbackResponse = (response: {
 	message: string;
 }) => void;
 
+export type NamespaceNames = "channels" | "messages";
+
 export interface ICustomNamespace {
-	name: string;
+	name: NamespaceNames;
 	namespace: Namespace | undefined;
 	socket: Socket | undefined;
 

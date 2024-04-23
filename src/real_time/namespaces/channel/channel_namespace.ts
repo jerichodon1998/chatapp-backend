@@ -3,9 +3,10 @@ import Channel from "../../../models/Channel";
 import { ObjectId } from "mongodb";
 import { mongo } from "mongoose";
 import CustomNamespace from "../../socket_models/CustomNamespace";
+import { NamespaceNames } from "../../../types/socket";
 
 class ChannelManager extends CustomNamespace {
-	constructor(name: string) {
+	constructor(name: NamespaceNames) {
 		super(name);
 	}
 

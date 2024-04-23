@@ -5,10 +5,11 @@ import messageMiddlewares from "../../middlewares/message_middlewares";
 import Message from "../../../models/Message";
 import { mongo } from "mongoose";
 import CustomNamespace from "../../socket_models/CustomNamespace";
+import { NamespaceNames } from "../../../types/socket";
 
 // TODO - validation/sanitization of user inputs
 class MessageManager extends CustomNamespace {
-	constructor(name: string) {
+	constructor(name: NamespaceNames) {
 		super(name);
 	}
 
