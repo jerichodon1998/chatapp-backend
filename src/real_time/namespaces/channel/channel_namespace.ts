@@ -80,8 +80,10 @@ class ChannelManager extends CustomNamespace {
 					throw new Error("Need to initialize namespace first");
 				}
 
+				// exit if there are no connected socket(s)
 				if (!this.socket?.id) {
-					throw new Error("Need to initialize namespace first");
+					console.log(`No socket connected on ${this.name}`);
+					return;
 				}
 
 				// Emit channel on every Channel ChangeStream event [insert, update, delete]
