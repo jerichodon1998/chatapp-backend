@@ -14,13 +14,13 @@ export default async (
 	console.log(event);
 	// apply middleware to corresponding event name
 	switch (event) {
-		case "message:send":
+		case "messageSend":
 			await messageSendMiddleware(args, next, socket);
 			break;
-		case "message:delete":
+		case "messageDelete":
 			await messageDeleteMiddleware(args, next, socket);
 			break;
-		case "message:update":
+		case "messageUpdate":
 			await messageUpdateMiddleware(args, next, socket);
 			break;
 		default:
