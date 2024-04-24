@@ -5,11 +5,11 @@ import messageMiddlewares from "../../middlewares/message_middlewares";
 import Message from "../../../models/Message";
 import { mongo } from "mongoose";
 import CustomNamespace from "../../socket_models/CustomNamespace";
-import { NamespaceNames } from "../../../types/socket";
+import { TNamespaceNames } from "../../../types/socket";
 
 // TODO - validation/sanitization of user inputs
-class MessageManager extends CustomNamespace {
-	constructor(name: NamespaceNames) {
+class MessageManager extends CustomNamespace<"messages"> {
+	constructor(name: TNamespaceNames) {
 		super(name);
 	}
 
@@ -34,9 +34,9 @@ class MessageManager extends CustomNamespace {
 			// TODO - send message should be able to distinguish
 			// 		- direct(private messages) channels with unique combinations of members
 
-			socket.on("message:send", messageSendHandler);
-			socket.on("message:delete", messageDeleteHandler);
-			socket.on("message:update", messageUpdateHandler);
+			socket.on("messageSend", messageSendHandler);
+			socket.on("messageDelete", messageDeleteHandler);
+			socket.on("messageUpdate", messageUpdateHandler);
 		});
 	}
 
@@ -73,22 +73,34 @@ class MessageManager extends CustomNamespace {
 					throw new Error("Need to initialize namespace first");
 				}
 
+				// exit if there are no connected socket(s)
+				if (!this.socket?.id) {
+					console.log(`No socket connected on ${this.name}`);
+					return;
+				}
+
 				// Emit message on every Message ChangeStream event [insert, update, delete]
 				switch (data.operationType) {
 					case "insert":
 						this.namespace
 							.to(data.fullDocument.channelId.toString())
-							.emit("message:send", data);
+							.emit("messageSend", data, (response) => {
+								response.forEach((res) => console.log(res.status));
+							});
 						break;
 					case "update":
 						this.namespace
 							.to(data.fullDocument?.channelId.toString())
-							.emit("message:update", data);
+							.emit("messageUpdate", data, (response) => {
+								response.forEach((res) => console.log(res.status));
+							});
 						break;
 					case "delete":
 						this.namespace
 							.to(data.fullDocumentBeforeChange?.channelId.toString())
-							.emit("message:delete", data);
+							.emit("messageDelete", data, (response) => {
+								response.forEach((res) => console.log(res.status));
+							});
 						break;
 				}
 			}

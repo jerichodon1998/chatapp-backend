@@ -3,10 +3,10 @@ import Channel from "../../../models/Channel";
 import { ObjectId } from "mongodb";
 import { mongo } from "mongoose";
 import CustomNamespace from "../../socket_models/CustomNamespace";
-import { NamespaceNames } from "../../../types/socket";
+import { TNamespaceNames } from "../../../types/socket";
 
-class ChannelManager extends CustomNamespace {
-	constructor(name: NamespaceNames) {
+class ChannelManager extends CustomNamespace<"channels"> {
+	constructor(name: TNamespaceNames) {
 		super(name);
 	}
 
@@ -101,19 +101,25 @@ class ChannelManager extends CustomNamespace {
 							await this.joinRoom(data.fullDocument._id.toString());
 							this.namespace
 								.to(data.fullDocument._id.toString())
-								.emit("channel:create", data);
+								.emit("channelCreate", data, (response) => {
+									response.forEach((res) => console.log(res.status));
+								});
 						}
 						break;
 					case "update":
 						this.namespace
 							.to(data.fullDocument?._id.toString())
-							.emit("channel:update", data);
+							.emit("channelUpdate", data, (response) => {
+								response.forEach((res) => console.log(res.status));
+							});
 						break;
 					case "delete":
 						// emit delete data
 						this.namespace
 							.to(data.fullDocumentBeforeChange?._id.toString())
-							.emit("channel:delete", data);
+							.emit("channelDelete", data, (response) => {
+								response.forEach((res) => console.log(res.status));
+							});
 						// leave room(channel)
 						await this.socket.leave(
 							data.fullDocumentBeforeChange?._id.toString()
