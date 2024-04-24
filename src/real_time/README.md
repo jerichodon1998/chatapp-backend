@@ -9,4 +9,5 @@ Handles all of the real time updates for this application. JWT token is used to 
 
 ### To-do
 
-- [ ] Implement Conditional Types in CustomNamespace, also read more about generic types in Typescript
+- [x] Implement Conditional Types in CustomNamespace, also read more about generic types in Typescript
+- [ ] Read more and implement emitWithAck to all 'Server to client events'

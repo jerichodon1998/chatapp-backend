@@ -26,32 +26,18 @@ export interface IMessageClientToServerEvents {
 
 export interface IMessageServerToClientEvents {
 	messageSend: (
-		data: mongo.ChangeStreamInsertDocument<mongo.BSON.Document>,
-		callback: ICallbackResponse
+		data: mongo.ChangeStreamInsertDocument<mongo.BSON.Document>
 	) => void;
-	messageUpdate: (
-		data: mongo.ChangeStreamUpdateDocument,
-		callback: ICallbackResponse
-	) => void;
-	messageDelete: (
-		data: mongo.ChangeStreamDeleteDocument,
-		callback: ICallbackResponse
-	) => void;
+	messageUpdate: (data: mongo.ChangeStreamUpdateDocument) => void;
+	messageDelete: (data: mongo.ChangeStreamDeleteDocument) => void;
 }
 
 export interface IChannelServerToClientEvents {
 	channelCreate: (
-		data: mongo.ChangeStreamInsertDocument<mongo.BSON.Document>,
-		callback: ICallbackResponse
+		data: mongo.ChangeStreamInsertDocument<mongo.BSON.Document>
 	) => void;
-	channelUpdate: (
-		data: mongo.ChangeStreamUpdateDocument,
-		callback: ICallbackResponse
-	) => void;
-	channelDelete: (
-		data: mongo.ChangeStreamDeleteDocument,
-		callback: ICallbackResponse
-	) => void;
+	channelUpdate: (data: mongo.ChangeStreamUpdateDocument) => void;
+	channelDelete: (data: mongo.ChangeStreamDeleteDocument) => void;
 }
 
 export type TChannelNamespace = Namespace<{}, IChannelServerToClientEvents>;

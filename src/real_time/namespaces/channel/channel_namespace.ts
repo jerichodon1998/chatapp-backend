@@ -101,25 +101,19 @@ class ChannelManager extends CustomNamespace<"channels"> {
 							await this.joinRoom(data.fullDocument._id.toString());
 							this.namespace
 								.to(data.fullDocument._id.toString())
-								.emit("channelCreate", data, (response) => {
-									response.forEach((res) => console.log(res.status));
-								});
+								.emit("channelCreate", data);
 						}
 						break;
 					case "update":
 						this.namespace
 							.to(data.fullDocument?._id.toString())
-							.emit("channelUpdate", data, (response) => {
-								response.forEach((res) => console.log(res.status));
-							});
+							.emit("channelUpdate", data);
 						break;
 					case "delete":
 						// emit delete data
 						this.namespace
 							.to(data.fullDocumentBeforeChange?._id.toString())
-							.emit("channelDelete", data, (response) => {
-								response.forEach((res) => console.log(res.status));
-							});
+							.emit("channelDelete", data);
 						// leave room(channel)
 						await this.socket.leave(
 							data.fullDocumentBeforeChange?._id.toString()

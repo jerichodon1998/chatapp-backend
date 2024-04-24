@@ -84,23 +84,17 @@ class MessageManager extends CustomNamespace<"messages"> {
 					case "insert":
 						this.namespace
 							.to(data.fullDocument.channelId.toString())
-							.emit("messageSend", data, (response) => {
-								response.forEach((res) => console.log(res.status));
-							});
+							.emit("messageSend", data);
 						break;
 					case "update":
 						this.namespace
 							.to(data.fullDocument?.channelId.toString())
-							.emit("messageUpdate", data, (response) => {
-								response.forEach((res) => console.log(res.status));
-							});
+							.emit("messageUpdate", data);
 						break;
 					case "delete":
 						this.namespace
 							.to(data.fullDocumentBeforeChange?.channelId.toString())
-							.emit("messageDelete", data, (response) => {
-								response.forEach((res) => console.log(res.status));
-							});
+							.emit("messageDelete", data);
 						break;
 				}
 			}
