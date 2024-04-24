@@ -1,21 +1,27 @@
-import { Namespace, Server, Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { verifyJwtToken } from "../../helpers/token_helper";
 import Channel from "../../models/Channel";
 import { ObjectId } from "mongodb";
-import { ICustomNamespace, NamespaceNames } from "../../types/socket";
+import {
+	ICustomNamespace,
+	TNamespaceNames,
+	TypeOfNamespace,
+} from "../../types/socket";
 
-export default class CustomNamespace implements ICustomNamespace {
-	name: NamespaceNames;
-	namespace: Namespace | undefined;
+export default class CustomNamespace<T extends TNamespaceNames>
+	implements ICustomNamespace
+{
+	name: TNamespaceNames;
+	namespace: TypeOfNamespace<T> | undefined;
 	socket: Socket | undefined;
 
-	constructor(name: NamespaceNames) {
+	constructor(name: TNamespaceNames) {
 		this.name = name;
 	}
 
 	initializeNamespace(io: Server) {
 		// create a custom namespace
-		this.namespace = io.of(`/${this.name}`);
+		this.namespace = io.of(`/${this.name}`) as TypeOfNamespace<T>;
 
 		this.socketEvents();
 		this.serverSentEvents();
