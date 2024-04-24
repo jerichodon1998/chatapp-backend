@@ -82,6 +82,9 @@ const channelMessageTransaction = async (
 	// store both id in a const and sorted - NOTE for searching optimization (Theoritically and not proven)
 	const membersId = [author._id, recipient._id].sort();
 
+	const mergedIds: string =
+		membersId[0].toString() + "-" + membersId[1].toString();
+
 	// start session
 	const session = await mongoose.startSession();
 
@@ -90,23 +93,23 @@ const channelMessageTransaction = async (
 
 	// message and channel transaction
 	try {
-		// create channel
-		const channel = await Channel.create(
-			[
-				{
-					members: membersId,
-					channelType: channelType,
-				},
-			],
-			{ session: session }
+		// fetch channel with corresponding 'directChannelMergedIds' and use 'upsert'
+		const channel = await Channel.findOneAndUpdate(
+			{
+				members: membersId,
+				channelType: channelType,
+				directChannelMergedIds: mergedIds,
+			},
+			{},
+			{ session: session, upsert: true }
 		);
 
 		// create message and link it to channel
 		await Message.create(
 			[
 				{
-					authorId: author?._id,
-					channelId: channel[0]._id,
+					authorId: author._id,
+					channelId: channel?._id,
 					content: content,
 				},
 			],
