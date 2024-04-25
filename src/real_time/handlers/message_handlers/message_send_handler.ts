@@ -3,6 +3,7 @@ import Channel from "../../../models/Channel";
 import User from "../../../models/User";
 import Message from "../../../models/Message";
 import { ICallbackResponse } from "../../../types/socket";
+import { ObjectId } from "mongodb";
 
 export const messageSendHandler = async (
 	payload: ISendMessageSocketPayload,
@@ -96,23 +97,48 @@ const channelMessageTransaction = async (
 		// fetch channel with corresponding 'directChannelMergedIds' and use 'upsert'
 		const channel = await Channel.findOneAndUpdate(
 			{
+				directChannelMergedIds: mergedIds,
+			},
+			{
 				members: membersId,
 				channelType: channelType,
 				directChannelMergedIds: mergedIds,
 			},
-			{},
-			{ session: session, upsert: true }
+			{ session: session, upsert: true, new: true }
 		);
+
+		// return error if channel is empty
+		if (!channel) {
+			throw new Error("Channel is empty");
+		}
 
 		// create message and link it to channel
 		await Message.create(
 			[
 				{
 					authorId: author._id,
-					channelId: channel?._id,
+					channelId: channel._id,
 					content: content,
 				},
 			],
+			{ session: session }
+		);
+
+		// update author's channels
+		await User.findByIdAndUpdate(
+			author._id,
+			{
+				$addToSet: { channels: new ObjectId(channel._id) },
+			},
+			{ session: session }
+		);
+
+		// update recipient's channels
+		await User.findByIdAndUpdate(
+			recipient._id,
+			{
+				$addToSet: { channels: new ObjectId(channel._id) },
+			},
 			{ session: session }
 		);
 
