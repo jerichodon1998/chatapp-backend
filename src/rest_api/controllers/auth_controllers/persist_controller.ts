@@ -9,7 +9,6 @@ const persistController: RequestHandler = async (req, res) => {
 
 		if (user) {
 			const { password, ...rest } = user.toJSON();
-			console.log(rest);
 			return res.status(200).json(rest);
 		} else {
 			return res.status(404).json({ message: "Not found" });
