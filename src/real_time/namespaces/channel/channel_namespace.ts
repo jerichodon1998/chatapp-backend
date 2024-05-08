@@ -3,7 +3,7 @@ import Channel from "../../../models/Channel";
 import { ObjectId } from "mongodb";
 import { mongo } from "mongoose";
 import CustomNamespace from "../../socket_models/CustomNamespace";
-import { TNamespaceNames } from "../../../types/socket";
+import { TNamespaceNames } from "SocketTypes";
 
 class ChannelManager extends CustomNamespace<"channels"> {
 	constructor(name: TNamespaceNames) {

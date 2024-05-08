@@ -2,8 +2,9 @@ import mongoose from "mongoose";
 import Channel from "../../../models/Channel";
 import User from "../../../models/User";
 import Message from "../../../models/Message";
-import { ICallbackResponse } from "../../../types/socket";
 import { ObjectId } from "mongodb";
+import { ISendMessageSocketPayload } from "MessageTypes";
+import { ICallbackResponse } from "SocketTypes";
 
 export const messageSendHandler = async (
 	payload: ISendMessageSocketPayload,

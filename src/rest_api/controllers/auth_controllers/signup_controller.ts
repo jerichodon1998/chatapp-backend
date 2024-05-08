@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import User from "../../../models/User";
 import bcrypt from "bcrypt";
 import { attachTokenToCookie, issueToken } from "../../../helpers/token_helper";
-import { ISignup } from "../../../types/user";
+import { ISignup } from "UserTypes";
 
 const signupController: RequestHandler<{}, {}, ISignup> = async (req, res) => {
 	const { email, password, username } = req.body;

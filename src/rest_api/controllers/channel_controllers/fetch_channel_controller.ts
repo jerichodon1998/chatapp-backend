@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import Channel from "../../../models/Channel";
+import { IFetchChannelReqParam } from "ChannelTypes";
 
 const fetchChannelController: RequestHandler<IFetchChannelReqParam> = async (
 	req,

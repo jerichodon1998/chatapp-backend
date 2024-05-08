@@ -1,3 +1,4 @@
+import { IChannel } from "ChannelTypes";
 import { Schema, model } from "mongoose";
 
 const channelSchema = new Schema<IChannel>({
