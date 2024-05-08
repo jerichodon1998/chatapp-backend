@@ -1,12 +1,11 @@
 import { Server, Socket } from "socket.io";
 import { verifyJwtToken } from "../../helpers/token_helper";
-import Channel from "../../models/Channel";
-import { ObjectId } from "mongodb";
 import {
 	ICustomNamespace,
 	TNamespaceNames,
 	TypeOfNamespace,
 } from "../../types/socket";
+import User from "../../models/User";
 
 export default class CustomNamespace<T extends TNamespaceNames>
 	implements ICustomNamespace
@@ -27,8 +26,7 @@ export default class CustomNamespace<T extends TNamespaceNames>
 		this.serverSentEvents();
 	}
 
-	// TODO - improve join rooms
-	// NOTE - Can improve this by creating a list of the user's joined channels
+	// join rooms with user's channels property
 	async joinRooms() {
 		if (!this.socket?.id) {
 			throw new Error("Need to initialize namespace first");
@@ -38,14 +36,14 @@ export default class CustomNamespace<T extends TNamespaceNames>
 			// verify token
 			const decodedToken = verifyJwtToken(this.socket);
 			// fetch channels where the user is a member through the _id payload from token
-			const channels = await Channel.find({
-				members: {
-					$in: new ObjectId(decodedToken._id),
-				},
-			});
+			const user = await User.findById(decodedToken._id, { channels: 1 });
+			// return error if user doesn't exist
+			if (!user) throw new Error("User not found");
+
+			const channels = user.channels;
 			// join rooms
 			for (let i = 0; i < channels.length; i++) {
-				await this.socket.join(channels[i]._id.toString());
+				await this.socket.join(channels[i].toString());
 			}
 		} catch (error) {
 			console.log(error);

@@ -1,18 +1,21 @@
-interface IUserInfo {
+import { ObjectId } from "mongoose";
+
+export interface IUserInfo {
 	username: string;
 	email: string;
+	channels: ObjectId[];
 }
 
-interface ISignin {
+export interface ISignin {
 	email: string;
 	password: string;
 }
 
-interface ISignup extends IUserInfo {
+export interface ISignup extends IUserInfo {
 	password: string;
 }
 
-interface IUser extends IUserInfo {
+export interface IUser extends IUserInfo {
 	// Add more required data in the future
 	password: string;
 }

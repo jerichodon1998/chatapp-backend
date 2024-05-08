@@ -31,8 +31,6 @@ class MessageManager extends CustomNamespace<"messages"> {
 			this.socket.use(([event, ...args], next) => {
 				messageMiddlewares(event, args, next, socket);
 			});
-			// TODO - send message should be able to distinguish
-			// 		- direct(private messages) channels with unique combinations of members
 
 			socket.on("messageSend", messageSendHandler);
 			socket.on("messageDelete", messageDeleteHandler);

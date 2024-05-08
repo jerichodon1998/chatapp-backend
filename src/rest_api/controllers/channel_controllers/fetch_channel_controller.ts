@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
 import Channel from "../../../models/Channel";
-import mongoose from "mongoose";
 
 const fetchChannelController: RequestHandler<IFetchChannelReqParam> = async (
 	req,
@@ -16,21 +15,17 @@ const fetchChannelController: RequestHandler<IFetchChannelReqParam> = async (
 	}
 
 	// perform aggregation of channel with messages
-	const db = mongoose.connection.db.collection("channels");
-
-	const data = await db
-		.aggregate([
-			{ $match: { _id: channel._id } },
-			{
-				$lookup: {
-					from: "messages",
-					localField: "_id",
-					foreignField: "channelId",
-					as: "messages",
-				},
+	const data = await Channel.aggregate([
+		{ $match: { _id: channel._id } },
+		{
+			$lookup: {
+				from: "messages",
+				localField: "_id",
+				foreignField: "channelId",
+				as: "messages",
 			},
-		])
-		.toArray();
+		},
+	]).exec();
 
 	return res.status(200).json(data);
 };
