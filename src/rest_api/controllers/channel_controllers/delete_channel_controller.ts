@@ -2,6 +2,7 @@ import { RequestHandler, Response } from "express";
 import mongoose from "mongoose";
 import Message from "../../../models/Message";
 import Channel from "../../../models/Channel";
+import User from "../../../models/User";
 
 // delete channel along with messages linked to it applying transaction
 const deleteChannelTransaction = async (channelId: string, res: Response) => {
@@ -16,12 +17,24 @@ const deleteChannelTransaction = async (channelId: string, res: Response) => {
 		// fetch channel if exist, just its ID
 		const channel = await Channel.findById(
 			channelId,
-			{ _id: 1 },
+			{ _id: 1, members: 1 },
 			{ session: session }
 		);
 
 		if (!channel) {
 			throw Error("channel does not exist");
+		}
+
+		// remove channels from members' lists
+		for (let i = 0; i < channel.members.length; i++) {
+			const memberId = channel.members[i];
+			await User.findByIdAndUpdate(
+				memberId,
+				{
+					$pull: { channels: { $in: [channel._id] } },
+				},
+				{ session: session }
+			);
 		}
 
 		// delete

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import User from "../../../models/User";
 import Channel from "../../../models/Channel";
 import Message from "../../../models/Message";
+import { ObjectId } from "mongodb";
 import { ISendMessageReqBody } from "MessageTypes";
 
 const sendMessageController: RequestHandler<
@@ -83,6 +84,8 @@ const channelMessageTransaction = async (
 	// store both id in a const and sorted - NOTE for searching optimization (Theoritically and not proven)
 	const membersId = [author._id, recipient._id].sort();
 
+	const mergedIds: string =
+		membersId[0].toString() + "-" + membersId[1].toString();
 	// start session
 	const session = await mongoose.startSession();
 
@@ -91,26 +94,51 @@ const channelMessageTransaction = async (
 
 	// message and channel transaction
 	try {
-		// create channel
-		const channel = await Channel.create(
-			[
-				{
-					members: membersId,
-					channelType: channelType,
-				},
-			],
-			{ session: session }
+		// fetch channel with corresponding 'directChannelMergedIds' and use 'upsert'
+		const channel = await Channel.findOneAndUpdate(
+			{
+				directChannelMergedIds: mergedIds,
+			},
+			{
+				members: membersId,
+				channelType: channelType,
+				directChannelMergedIds: mergedIds,
+			},
+			{ session: session, upsert: true, new: true }
 		);
+
+		// return error if channel is empty
+		if (!channel) {
+			throw new Error("Channel is empty");
+		}
 
 		// create message and link it to channel
 		await Message.create(
 			[
 				{
-					authorId: author?._id,
-					channelId: channel[0]._id,
+					authorId: author._id,
+					channelId: channel._id,
 					content: content,
 				},
 			],
+			{ session: session }
+		);
+
+		// update author's channels
+		await User.findByIdAndUpdate(
+			author._id,
+			{
+				$addToSet: { channels: new ObjectId(channel._id) },
+			},
+			{ session: session }
+		);
+
+		// update recipient's channels
+		await User.findByIdAndUpdate(
+			recipient._id,
+			{
+				$addToSet: { channels: new ObjectId(channel._id) },
+			},
 			{ session: session }
 		);
 
