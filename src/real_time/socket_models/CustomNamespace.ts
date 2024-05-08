@@ -1,11 +1,11 @@
 import { Server, Socket } from "socket.io";
 import { verifyJwtToken } from "../../helpers/token_helper";
+import User from "../../models/User";
 import {
 	ICustomNamespace,
 	TNamespaceNames,
 	TypeOfNamespace,
-} from "../../types/socket";
-import User from "../../models/User";
+} from "SocketTypes";
 
 export default class CustomNamespace<T extends TNamespaceNames>
 	implements ICustomNamespace

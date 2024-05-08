@@ -1,5 +1,6 @@
+import { IEditMessageSocketPayload } from "MessageTypes";
 import Message from "../../../models/Message";
-import { ICallbackResponse } from "../../../types/socket";
+import { ICallbackResponse } from "SocketTypes";
 
 export const messageUpdateHandler = async (
 	payload: IEditMessageSocketPayload,

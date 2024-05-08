@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Socket } from "socket.io";
+import { IToken } from "TokenTypes";
 
 const JWT_KEY =
 	process.env.ENV === "production" ? process.env.JWT_KEY : "secretkey";

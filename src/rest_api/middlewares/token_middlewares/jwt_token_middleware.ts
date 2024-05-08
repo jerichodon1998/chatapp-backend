@@ -3,6 +3,12 @@ import { verifyJwtToken } from "../../../helpers/token_helper";
 import Message from "../../../models/Message";
 import Channel from "../../../models/Channel";
 import mongoose from "mongoose";
+import {
+	IDeleteMessageReqParam,
+	IEditMessageReqParam,
+	ISendMessageReqBody,
+} from "MessageTypes";
+import { IFetchChannelReqParam } from "ChannelTypes";
 
 export const verifyToken: RequestHandler = async (req, res, next) => {
 	// verify token

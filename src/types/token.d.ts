@@ -1,3 +1,3 @@
-interface IToken {
+export interface IToken {
 	_id: string;
 }

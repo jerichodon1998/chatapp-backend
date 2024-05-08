@@ -1,3 +1,4 @@
+import { IMessage } from "MessageTypes";
 import { Schema, model } from "mongoose";
 
 const messageSchema = new Schema<IMessage>({

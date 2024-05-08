@@ -1,8 +1,8 @@
 import { Server } from "socket.io";
 import { Server as httpServer } from "http";
-import { ISocketServer } from "../../types/socket";
 import messageNamespace from "../namespaces/messages/message_namespace";
 import channelNamespace from "../namespaces/channel/channel_namespace";
+import { ISocketServer } from "SocketTypes";
 
 export default class SocketServer implements ISocketServer {
 	io: Server | undefined;

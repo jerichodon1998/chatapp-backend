@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import User from "../../../models/User";
 import Channel from "../../../models/Channel";
 import Message from "../../../models/Message";
+import { ISendMessageReqBody } from "MessageTypes";
 
 const sendMessageController: RequestHandler<
 	{},

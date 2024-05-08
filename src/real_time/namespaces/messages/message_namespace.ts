@@ -5,7 +5,7 @@ import messageMiddlewares from "../../middlewares/message_middlewares";
 import Message from "../../../models/Message";
 import { mongo } from "mongoose";
 import CustomNamespace from "../../socket_models/CustomNamespace";
-import { TNamespaceNames } from "../../../types/socket";
+import { TNamespaceNames } from "SocketTypes";
 
 // TODO - validation/sanitization of user inputs
 class MessageManager extends CustomNamespace<"messages"> {

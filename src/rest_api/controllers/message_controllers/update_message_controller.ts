@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import Message from "../../../models/Message";
+import { IEditMessageReqParam } from "MessageTypes";
 
 const updateMessageController: RequestHandler<
 	IEditMessageReqParam,
