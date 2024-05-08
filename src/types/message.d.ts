@@ -1,10 +1,12 @@
-interface IMessage {
+import { Schema } from "mongoose";
+
+export interface IMessage {
 	content: string;
-	channelId: object;
-	authorId: object;
+	channelId: Schema.Types.ObjectId;
+	authorId: Schema.Types.ObjectId;
 }
 
-interface ISendMessage {
+export interface ISendMessage {
 	content: string;
 	recipientId?: string;
 	authorId: string;
@@ -12,22 +14,22 @@ interface ISendMessage {
 	channelId?: string;
 }
 /* Express API */
-interface ISendMessageReqBody extends ISendMessage {}
+export interface ISendMessageReqBody extends ISendMessage {}
 
-interface IDeleteMessageReqParam {
+export interface IDeleteMessageReqParam {
 	messageId: string;
 }
 
-interface IEditMessageReqParam {
+export interface IEditMessageReqParam {
 	messageId: string;
 }
 
 /* Socket.io */
-interface ISendMessageSocketPayload extends ISendMessage {}
-interface IDeleteMessageSocketPayload {
+export interface ISendMessageSocketPayload extends ISendMessage {}
+export interface IDeleteMessageSocketPayload {
 	messageId: string;
 }
-interface IEditMessageSocketPayload {
+export interface IEditMessageSocketPayload {
 	messageId: string;
 	content: string;
 }
