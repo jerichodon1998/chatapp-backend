@@ -5,7 +5,8 @@
 	"license": "MIT",
 	"scripts": {
 		"dev": "nodemon --files ./src/index.ts",
-		"test": "jest"
+		"test": "jest --verbose",
+		"test:smoke": "jest --verbose ./tests/smoke/"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.24.5",
