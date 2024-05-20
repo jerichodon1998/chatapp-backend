@@ -1,6 +1,6 @@
 import { afterAll, describe, test } from "@jest/globals";
-import DBConnection from "../../../src/database_configurations/DBConnection";
-import restAPI from "../../../src/rest_api";
+import DBConnection from "../../src/database_configurations/DBConnection";
+import restAPI from "../../src/rest_api";
 import { Server } from "http";
 import { ISignin } from "UserTypes";
 import request from "supertest";
