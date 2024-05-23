@@ -9,6 +9,7 @@ import {
 	ISendMessageReqBody,
 } from "MessageTypes";
 import { IFetchChannelReqParam } from "ChannelTypes";
+import { IDeleteAccountRequestParams } from "UserTypes";
 
 export const verifyToken: RequestHandler = async (req, res, next) => {
 	// verify token
@@ -19,6 +20,25 @@ export const verifyToken: RequestHandler = async (req, res, next) => {
 	} catch (error) {
 		console.log(error);
 		return res.status(403).json({ message: "Forbidden" });
+	}
+};
+
+// verify and checks if the requester is the owner of the account being deleted
+export const verifyAccountDeleterToken: RequestHandler<
+	IDeleteAccountRequestParams
+> = (req, res, next) => {
+	const { Bearer } = req.cookies;
+	if (!Bearer) {
+		return res.status(401).json({ message: "Unauthorized" });
+	}
+	try {
+		const decodedToken = verifyJwtToken(req);
+		decodedToken._id === req.params.uid
+			? next()
+			: res.status(401).json({ message: "Unauthorized" });
+	} catch (error) {
+		console.log(error);
+		return res.status(401).json({ message: "Unauthorized" });
 	}
 };
 

@@ -19,3 +19,7 @@ export interface IUser extends IUserInfo {
 	// Add more required data in the future
 	password: string;
 }
+
+export interface IDeleteAccountRequestParams {
+	uid: string;
+}
