@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "nodemon --files ./src/index.ts",
 		"test": "jest --verbose",
-		"test:smoke": "jest --verbose ./tests/smoke/"
+		"test:smoke": "jest --verbose ./tests/smoke/",
+		"test:comprehensive": "jest --verbose ./tests/comprehensive"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.24.5",
