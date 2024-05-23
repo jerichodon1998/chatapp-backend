@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import auth_routes from "../rest_api/routes/auth_routes";
 import channel_routes from "../rest_api/routes/channel_routes";
 import message_routes from "../rest_api/routes/message_routes";
+import user_routes from "./routes/user_routes";
 import { verifyToken } from "../rest_api/middlewares/token_middlewares/jwt_token_middleware";
 
 const app = express();
@@ -31,5 +32,7 @@ app.use("/auth", auth_routes);
 app.use("/messages", message_routes);
 // channel path
 app.use("/channels", channel_routes);
+// user path
+app.use("/users", user_routes);
 
 export default app;
