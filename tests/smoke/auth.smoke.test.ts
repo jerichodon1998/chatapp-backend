@@ -1,16 +1,20 @@
-import { afterAll, describe, test } from "@jest/globals";
+import { afterAll, describe, expect, test } from "@jest/globals";
 import DBConnection from "../../src/database_configurations/DBConnection";
 import restAPI from "../../src/rest_api";
 import { Server } from "http";
-import { ISignin } from "UserTypes";
+import { ISignin, ISignup } from "UserTypes";
 import request from "supertest";
 
 describe("Authentication tests:", () => {
 	const PORT = 3001;
 	const signinEndPoint = "/auth/signin";
-	const userCredentials: ISignin = {
-		email: "mark@email.com",
+	const signupEndpoint = "/auth/signup";
+	const usersEndpoint = "/users";
+	const userCredentials: ISignin & ISignup = {
+		email: "testuser@email.com",
+		username: "testusername",
 		password: "password",
+		channels: [],
 	};
 	let api: null | Server = null;
 
@@ -27,8 +31,17 @@ describe("Authentication tests:", () => {
 		}
 	});
 
-	// TODO - Implement this after creating a delete user route and controller
-	test.todo("Should signup successfully with right input credentials");
+	test("Should signup successfully with right input credentials", async () => {
+		if (!api) {
+			throw new Error("API is null");
+		}
+
+		const response = await request(api)
+			.post(signupEndpoint)
+			.send(userCredentials);
+
+		expect(response.statusCode).toBe(201);
+	});
 
 	test("Should login successfully with right credentials", async () => {
 		if (!api) {
@@ -50,8 +63,24 @@ describe("Authentication tests:", () => {
 		expect(tokenValue).not.toBeFalsy();
 	});
 
-	// TODO - Implement this after creating a delete user route and controller
-	test.todo("Should delete user account");
+	test("Should delete user account", async () => {
+		if (!api) {
+			throw new Error("API is null");
+		}
+
+		// login and use the token to request a delete a user
+		const response = await request(api)
+			.post(signinEndPoint)
+			.send(userCredentials);
+
+		const tokenKeyValuePair = response.headers["set-cookie"][0].split(";")[0];
+
+		const deleteUserResponse = await request(api)
+			.delete(`${usersEndpoint}/${response.body._id}`)
+			.set("Cookie", tokenKeyValuePair);
+
+		expect(deleteUserResponse.statusCode).toBe(200);
+	});
 
 	afterAll(async () => {
 		await DBConnection.dbDisconnect();
