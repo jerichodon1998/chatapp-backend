@@ -64,7 +64,7 @@ describe("Authentication tests:", () => {
 		expect(tokenValue).not.toBeFalsy();
 	});
 
-	test("Should login successfully with right credentials and logout", async () => {
+	test("Should login successfully with right credentials and logout successfully", async () => {
 		if (!api) {
 			throw new Error("API is null");
 		}
