@@ -9,6 +9,7 @@ describe("Authentication tests:", () => {
 	const PORT = 3001;
 	const signinEndPoint = "/auth/signin";
 	const signupEndpoint = "/auth/signup";
+	const signoutEndpoint = "/auth/logout";
 	const usersEndpoint = "/users";
 	const userCredentials: ISignin & ISignup = {
 		email: "testuser@email.com",
@@ -61,6 +62,28 @@ describe("Authentication tests:", () => {
 		expect(response.statusCode).toBe(200);
 		expect(tokenKey).toBe("Bearer");
 		expect(tokenValue).not.toBeFalsy();
+	});
+
+	test("Should login successfully with right credentials and logout", async () => {
+		if (!api) {
+			throw new Error("API is null");
+		}
+
+		const response = await request(api)
+			.post(signinEndPoint)
+			.send(userCredentials);
+
+		const responseLogout = await request(api).post(signoutEndpoint);
+
+		const tokenKeyValuePair = responseLogout.headers["set-cookie"][0]
+			.split(";")[0]
+			.split("=");
+		const tokenKey = tokenKeyValuePair[0];
+		const tokenValue = tokenKeyValuePair[1];
+
+		expect(response.statusCode).toBe(200);
+		expect(tokenKey).toBe("Bearer");
+		expect(tokenValue).toBeFalsy();
 	});
 
 	test("Should delete user account", async () => {
