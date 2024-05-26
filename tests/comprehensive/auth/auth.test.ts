@@ -44,3 +44,12 @@ describe("Signup should throw an error:", () => {
 	test.todo("when password is not valid");
 	test.todo("when password is not provided");
 });
+
+describe("Signin should throw an error:", () => {
+	// email errors
+	test.todo("when email doesn't match on any account");
+	test.todo("when email is not provided");
+	// password errors
+	test.todo("when password doesn't match on any account");
+	test.todo("when password is not provided");
+});
