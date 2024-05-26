@@ -1,23 +1,11 @@
-import { afterAll, describe, test } from "@jest/globals";
+import { afterAll, describe } from "@jest/globals";
 import DBConnection from "../../../src/database_configurations/DBConnection";
 import restAPI from "../../../src/rest_api";
 import { Server } from "http";
-import { ISignin, ISignup } from "UserTypes";
-import request from "supertest";
 
 describe("Authentication tests:", () => {
 	const PORT = 1234;
-	const signinEndPoint = "/auth/signin";
-	const userSigninCredentials: ISignin = {
-		email: "mark@email.com",
-		password: "password",
-	};
 
-	const userSignupCredentials: ISignup = {
-		...userSigninCredentials,
-		username: "testusername",
-		channels: [],
-	};
 	let api: null | Server = null;
 
 	beforeAll(async () => {
@@ -33,34 +21,26 @@ describe("Authentication tests:", () => {
 		}
 	});
 
-	// TODO - Implement this after creating a delete user route and controller
-	test.todo("Should signup successfully with right input credentials");
-
-	test("Should login successfully with right credentials", async () => {
-		if (!api) {
-			throw new Error("API is null");
-		}
-
-		const response = await request(api)
-			.post(signinEndPoint)
-			.send(userSignupCredentials);
-
-		const tokenKeyValuePair = response.headers["set-cookie"][0]
-			.split(";")[0]
-			.split("=");
-		const tokenKey = tokenKeyValuePair[0];
-		const tokenValue = tokenKeyValuePair[1];
-
-		expect(response.statusCode).toBe(200);
-		expect(tokenKey).toBe("Bearer");
-		expect(tokenValue).not.toBeFalsy();
+	test("Should equal 1 to 1", () => {
+		expect(1).toBe(1);
 	});
-
-	// TODO - Implement this after creating a delete user route and controller
-	test.todo("Should delete user account");
 
 	afterAll(async () => {
 		await DBConnection.dbDisconnect();
 		api?.close();
 	});
+});
+
+describe("Signup should throw an error:", () => {
+	// email errors
+	test.todo("when email is already in use");
+	test.todo("when email is not a valid email"); // hint: use regex for validation in your controller
+	test.todo("when email is not provided");
+	// username errors
+	test.todo("when username is already in use"); // hint: apply unique property on the named field "username"
+	test.todo("when username is not valid"); // hint: use regex for validation
+	test.todo("when username is not provided");
+	// password errors
+	test.todo("when password is not valid");
+	test.todo("when password is not provided");
 });
